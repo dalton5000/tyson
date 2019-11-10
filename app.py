@@ -8,7 +8,7 @@ PORT = int(os.environ.get('PORT', 8080))
 
 class Echo(DatagramProtocol):
 
-    def datagramReceived(self, data, (host, port)):
+    def datagramReceived(self, data, host, port):
         print ("received %r from %s:%d" % (data, host, port))
         self.transport.write(data, (host, port))
 
