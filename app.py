@@ -1,20 +1,17 @@
 # -*- coding: utf-8 -*-
 
 import os
-
-from twisted.web import server, resource
+from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
 
 PORT = int(os.environ.get('PORT', 8080))
 
-class HelloResource(resource.Resource):
-    isLeaf = True
-    numberRequests = 0
+class Echo(DatagramProtocol):
 
-    def render_GET(self, request):
-        self.numberRequests += 1
-        request.setHeader("content-type", "text/plain")
-        return "I am request #" + str(self.numberRequests) + "\n"
+    def datagramReceived(self, data, (host, port)):
+        print ("received %r from %s:%d" % (data, host, port))
+        self.transport.write(data, (host, port))
 
-reactor.listenTCP(PORT, server.Site(HelloResource()))
+
+reactor.listenUDP(9999, Echo())
 reactor.run()
