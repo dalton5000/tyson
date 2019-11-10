@@ -4,15 +4,16 @@ import os
 from twisted.internet.protocol import DatagramProtocol
 from twisted.internet import reactor
 
-PORT = int(os.environ.get('PORT', 8080))
-
-class Echo(DatagramProtocol):
+port = int(os.environ.get('PORT', 5000))
+print("tyson found port:")
+print(port)
+class EchoProtocol(DatagramProtocol):
 
     def datagramReceived(self, datagram, address):
-        print ("received %r from %s:%d" % (datagram, address))
+        print ("received %r from %s" % (datagram, address))
         self.transport.write(datagram, address)
 
 
-reactor.listenUDP(PORT, Echo())
+reactor.listenUDP(port, EchoProtocol())
 reactor.run()
 print("tyson is listening")
