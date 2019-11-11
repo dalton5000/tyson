@@ -1,0 +1,9 @@
+
+*.xml
+*.iml
+*.7z
+*.exe
+*.pck
+.idea/
+godot-client/export/
+godot-client/multiplayer_pong/export/
