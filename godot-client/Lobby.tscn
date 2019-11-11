@@ -1,0 +1,111 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Lobby.gd" type="Script" id=1]
+
+[node name="Lobby" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+margin_left = 192.0
+margin_top = 140.0
+margin_right = 832.0
+margin_bottom = 460.0
+rect_min_size = Vector2( 640, 320 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 633.0
+margin_bottom = 313.0
+
+[node name="Title" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_right = 626.0
+margin_bottom = 14.0
+text = "Tyson Client"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_top = 18.0
+margin_right = 626.0
+margin_bottom = 42.0
+alignment = 1
+
+[node name="Label2" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 86.0
+margin_top = 5.0
+margin_right = 217.0
+margin_bottom = 19.0
+text = "Tyson server adress:"
+
+[node name="Adress" type="LineEdit" parent="CenterContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 221.0
+margin_right = 477.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 256, 0 )
+text = "tyson5000.ddns.net"
+
+[node name="Port" type="LineEdit" parent="CenterContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 481.0
+margin_right = 539.0
+margin_bottom = 24.0
+text = "4000"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_top = 46.0
+margin_right = 626.0
+margin_bottom = 66.0
+alignment = 1
+
+[node name="Pair" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 295.0
+margin_right = 331.0
+margin_bottom = 20.0
+text = "Pair"
+
+[node name="Button2" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+visible = false
+margin_left = 312.0
+margin_right = 354.0
+margin_bottom = 20.0
+disabled = true
+text = "Host"
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_top = 70.0
+margin_right = 626.0
+margin_bottom = 306.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 32
+custom_constants/margin_top = 32
+custom_constants/margin_left = 32
+custom_constants/margin_bottom = 32
+
+[node name="Panel" type="Panel" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer"]
+margin_left = 32.0
+margin_top = 32.0
+margin_right = 594.0
+margin_bottom = 204.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Log" type="TextEdit" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/Pair" to="." method="_on_Pair_pressed"]
