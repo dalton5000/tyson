@@ -30,7 +30,7 @@ class ServerProtocol(DatagramProtocol):
         if datagram == b'hello':
             print('Registration from %s:%d' % address)
             ip, port = address
-            self.transport.write(b'ok', address)
+            self.transport.write(bytes('ok:'+str(port),"utf-8"), address)
             self.addresses.append(address)
             if len(self.addresses) >= 2:
                 msg_0 = bytes ( self.addressString(self.addresses[1]), "utf-8")
