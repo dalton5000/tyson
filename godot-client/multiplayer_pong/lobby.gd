@@ -83,7 +83,7 @@ func start_traversal():
 	
 func host_game():
 	var host = NetworkedMultiplayerENet.new()
-	var port = DEFAULT_PORT
+	var port = udp_traversal.own_port
 	host.set_compression_mode(NetworkedMultiplayerENet.COMPRESS_RANGE_CODER)
 	var err = host.create_server(port, 1) # max: 1 peer, since it's a 2 players game
 	if err != OK:
@@ -96,7 +96,7 @@ func host_game():
 
 func join_game():
 	var ip = udp_traversal.peer_address
-	var port = DEFAULT_PORT
+	var port = udp_traversal.peer_port
 	if not ip.is_valid_ip_address():
 		dlog("IP address is invalid", false)
 		return
