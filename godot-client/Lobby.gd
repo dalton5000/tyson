@@ -15,7 +15,8 @@ func _on_Pair_pressed():
 	udp_traversal.rendevouz_address = $CenterContainer/PanelContainer/VBoxContainer/HBoxContainer2/Adress.text
 	udp_traversal.rendevouz_port = int( $CenterContainer/PanelContainer/VBoxContainer/HBoxContainer2/Port.text )
 	udp_traversal.client_name = $CenterContainer/PanelContainer/VBoxContainer/HBoxContainer3/ClientName.text
-	udp_traversal.start_server_contact()
+	
+	udp_traversal.start_traversal()
 	
 
 func dlog(line):

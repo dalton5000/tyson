@@ -1,0 +1,156 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://lobby.gd" type="Script" id=1]
+
+[node name="Lobby" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 2
+size_flags_vertical = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 64
+custom_constants/margin_top = 64
+custom_constants/margin_left = 64
+custom_constants/margin_bottom = 64
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 576.0
+margin_bottom = 336.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 505.0
+margin_bottom = 265.0
+
+[node name="title" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer"]
+margin_right = 498.0
+margin_bottom = 48.0
+size_flags_vertical = 0
+text = "Multiplayer Pong
+with Punchthrough
+"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+margin_left = 57.0
+margin_top = 52.0
+margin_right = 441.0
+margin_bottom = 76.0
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_top = 5.0
+margin_right = 126.0
+margin_bottom = 19.0
+text = "Rendezvouz-Server:"
+
+[node name="Address" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 130.0
+margin_right = 322.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 192, 0 )
+text = "tyson5000.ddns.net"
+
+[node name="Port" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer"]
+margin_left = 326.0
+margin_right = 384.0
+margin_bottom = 24.0
+text = "4000"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+margin_left = 109.0
+margin_top = 80.0
+margin_right = 389.0
+margin_bottom = 104.0
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+margin_top = 5.0
+margin_right = 84.0
+margin_bottom = 19.0
+text = "Client-Name:"
+
+[node name="Name" type="LineEdit" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer2"]
+margin_left = 88.0
+margin_right = 280.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 192, 0 )
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/PanelContainer/VBoxContainer"]
+modulate = Color( 1, 1, 1, 0 )
+margin_top = 108.0
+margin_right = 498.0
+margin_bottom = 116.0
+custom_constants/separation = 8
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+margin_top = 120.0
+margin_right = 498.0
+margin_bottom = 140.0
+custom_constants/separation = 16
+alignment = 1
+
+[node name="Host" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer3"]
+margin_left = 177.0
+margin_right = 241.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 64, 0 )
+text = "Host"
+
+[node name="Join" type="Button" parent="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer3"]
+margin_left = 257.0
+margin_right = 321.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 64, 0 )
+text = "Join"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+margin_top = 144.0
+margin_right = 498.0
+margin_bottom = 258.0
+size_flags_vertical = 3
+custom_constants/margin_right = 16
+custom_constants/margin_top = 16
+custom_constants/margin_left = 16
+custom_constants/margin_bottom = 16
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Log" type="TextEdit" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer"]
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 482.0
+margin_bottom = 98.0
+size_flags_vertical = 3
+
+[node name="StartTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+[connection signal="pressed" from="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer3/Host" to="." method="_on_Host_pressed"]
+[connection signal="pressed" from="MarginContainer/PanelContainer/VBoxContainer/HBoxContainer3/Join" to="." method="_on_Join_pressed"]
+[connection signal="timeout" from="StartTimer" to="." method="_on_StartTimer_timeout"]
