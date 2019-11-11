@@ -3,5 +3,6 @@
 *.iml
 *.7z
 *.exe
-*.7z
 *.pck
+.idea/
+godot-client/export/
