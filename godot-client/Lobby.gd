@@ -9,6 +9,8 @@ func reset():
 
 
 func _on_Pair_pressed():
+	udp_traversal.rendevouz_address = $CenterContainer/PanelContainer/VBoxContainer/HBoxContainer2/Adress.text
+	udp_traversal.rendevouz_port = $CenterContainer/PanelContainer/VBoxContainer/HBoxContainer2/Port.text
 	udp_traversal.start_server_contact()
 	
 
