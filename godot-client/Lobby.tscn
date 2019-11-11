@@ -63,10 +63,29 @@ margin_right = 539.0
 margin_bottom = 24.0
 text = "4000"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
 margin_top = 46.0
 margin_right = 626.0
-margin_bottom = 66.0
+margin_bottom = 70.0
+alignment = 1
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/HBoxContainer3"]
+margin_left = 207.0
+margin_top = 5.0
+margin_right = 286.0
+margin_bottom = 19.0
+text = "Client Name"
+
+[node name="ClientName" type="LineEdit" parent="CenterContainer/PanelContainer/VBoxContainer/HBoxContainer3"]
+margin_left = 290.0
+margin_right = 418.0
+margin_bottom = 24.0
+rect_min_size = Vector2( 128, 0 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+margin_top = 74.0
+margin_right = 626.0
+margin_bottom = 94.0
 alignment = 1
 
 [node name="Pair" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/HBoxContainer"]
@@ -84,7 +103,7 @@ disabled = true
 text = "Host"
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
-margin_top = 70.0
+margin_top = 98.0
 margin_right = 626.0
 margin_bottom = 306.0
 size_flags_horizontal = 3
@@ -98,7 +117,7 @@ custom_constants/margin_bottom = 32
 margin_left = 32.0
 margin_top = 32.0
 margin_right = 594.0
-margin_bottom = 204.0
+margin_bottom = 176.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 

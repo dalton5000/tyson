@@ -12,13 +12,13 @@ var own_port
 var peer_address
 var peer_port
 
-
+var client_name
 
 func _process(delta):
 	if peer_udp.get_available_packet_count() > 0:
 		var array_bytes = peer_udp.get_packet()
 		var packet_string = array_bytes.get_string_from_ascii()
-		dlog("Recieved Packet from peer!!! " + packet_string)
+		dlog("Recieved packet from peer: " + packet_string)
 		
 	if server_udp.get_available_packet_count() > 0:
 		var array_bytes = server_udp.get_packet()
@@ -47,6 +47,7 @@ func _process(delta):
 				start_peer_contact()
 				
 func start_peer_contact():
+	server_udp.close()
 	if peer_udp.is_listening():
 		peer_udp.close()
 	peer_udp.set_dest_address(peer_address, peer_port)
@@ -66,7 +67,7 @@ func start_peer_contact():
 func ping_peer():
 #	dlog("pinging peer...")
 	var buffer = PoolByteArray()
-	buffer.append_array("Hello from your peer".to_utf8())
+	buffer.append_array(("Hello from your peer "+ client_name ).to_utf8())
 	peer_udp.put_packet(buffer)
 
 	
