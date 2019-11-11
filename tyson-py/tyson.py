@@ -33,8 +33,8 @@ class ServerProtocol(DatagramProtocol):
             self.transport.write(bytes('ok:'+str(port),"utf-8"), address)
             self.addresses.append(address)
             if len(self.addresses) >= 2:
-                msg_0 = bytes ( self.addressString(self.addresses[1]), "utf-8")
-                msg_1 = bytes ( self.addressString(self.addresses[0]), "utf-8")
+                msg_0 = bytes ( 'peer:'+self.addressString(self.addresses[1]), "utf-8")
+                msg_1 = bytes ( 'peer:'+self.addressString(self.addresses[0]), "utf-8")
                 self.transport.write(msg_0, self.addresses[0])
                 self.transport.write(msg_1, self.addresses[1])
 
