@@ -2,6 +2,8 @@ extends Node
 
 signal hole_punched
 
+const DEFAULT_PORT = 8910
+
 var server_udp = PacketPeerUDP.new()
 var peer_udp = PacketPeerUDP.new()
 
@@ -81,7 +83,7 @@ func start_peer_contact():
 	if peer_udp.is_listening():
 		peer_udp.close()
 	peer_udp.set_dest_address(peer_address, peer_port)
-	var err = peer_udp.listen(own_port, "*")
+	var err = peer_udp.listen(DEFAULT_PORT, "*")
 	if err != OK:
 		dlog("Error listening on port: " + str(own_port) + " to peer: " + peer_address)
 	else:
