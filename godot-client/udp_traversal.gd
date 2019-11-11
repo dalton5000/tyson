@@ -46,7 +46,8 @@ func _process(delta):
 				dlog("Peer port: " + str( peer_port))
 				start_peer_contact()
 				
-func start_peer_contact():
+func start_peer_contact():	
+	server_udp.put_packet("goodbye".to_utf8())
 	server_udp.close()
 	if peer_udp.is_listening():
 		peer_udp.close()
