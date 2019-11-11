@@ -71,8 +71,8 @@ func _process(delta):
 				peer_address = p[1]
 				peer_port =int( p[2] )
 				recieved_peer_info=true
-				dlog("Peer adress: " + peer_address)
-				dlog("Peer port: " + str( peer_port))
+#				dlog("Peer adress: " + peer_address)
+#				dlog("Peer port: " + str( peer_port))
 				start_peer_contact()
 				
 func start_peer_contact():	
