@@ -9,15 +9,17 @@ var rendevouz_address = "tyson5000.ddns.net"
 var rendevouz_port = 4000
 var found_server = false
 var recieved_peer_info = false
-var recieved_peer_hello = false
-var recieved_peer_letsgo = false
-var recieved_letsgo_confirm = false
+var recieved_peer_greet = false
+var recieved_peer_confirm = false
+var recieved_peer_go = false
 
 var is_host = false
 var starting_game = false
+
 var own_port
 var peer_address
 var peer_port
+var peer_name
 var client_name
 var p_timer
 
@@ -26,20 +28,24 @@ func _process(delta):
 		var array_bytes = peer_udp.get_packet()
 		var packet_string = array_bytes.get_string_from_ascii()
 		
-		if not recieved_peer_hello:
-			if packet_string.begins_with("Hello"):
-				dlog("Recieved: " + packet_string)
-				recieved_peer_hello = true
+		if not recieved_peer_greet:
+			if packet_string.begins_with("greet"):
+				var p = packet_string.split(":")
+				peer_name = p[1]
+				dlog("Recieved greet from: "+peer_name)
+				dlog("Sending confirm")
+				recieved_peer_greet = true
 				
-		elif not recieved_peer_letsgo:
-			if packet_string.begins_with("Letsgo"):
-				dlog("Recieved Letsgo. Confirming..")
-				recieved_peer_letsgo = true
+		elif not recieved_peer_confirm:
+			if packet_string.begins_with("confirm"):
+				dlog("Recieved confirm from: "+peer_name)
+				dlog("Sending go")
+				recieved_peer_confirm = true
 				
-		elif not recieved_letsgo_confirm:
-			if packet_string.begins_with("Yes"):
-				dlog("Recieved confirmation")
-				recieved_letsgo_confirm = true
+		elif not recieved_peer_go:
+			if packet_string.begins_with("go"):
+				dlog("Recieved go from: "+peer_name)
+				recieved_peer_go = true
 				set_process(false)
 				emit_signal("hole_punched")
 		
@@ -92,22 +98,22 @@ func ping_peer():
 #	dlog("pinging peer...")
 	if starting_game: return
 	var buffer
-	if not recieved_peer_letsgo:
+	if not recieved_peer_confirm:
 		buffer = PoolByteArray()
-		buffer.append_array(("Hello from "+ client_name ).to_utf8())
-		dlog("sending:"+ str(buffer.get_string_from_utf8()))
+		buffer.append_array(("greet:"+ client_name ).to_utf8())
+#		dlog("sending:"+ str(buffer.get_string_from_utf8()))
 		peer_udp.put_packet(buffer)
 		
-	if recieved_peer_hello and not recieved_letsgo_confirm :
+	if recieved_peer_greet and not recieved_peer_go :
 		buffer = PoolByteArray()
-		buffer.append_array(("Letsgo").to_utf8())
-		dlog("sending:"+ str(buffer.get_string_from_utf8()))
+		buffer.append_array(("confirm").to_utf8())
+#		dlog("sending:"+ str(buffer.get_string_from_utf8()))
 		peer_udp.put_packet(buffer)
 		
-	if  recieved_peer_letsgo:
+	if  recieved_peer_confirm:
 		buffer = PoolByteArray()
-		buffer.append_array(("Yes").to_utf8())
-		dlog("sending:"+ str(buffer.get_string_from_utf8()))
+		buffer.append_array(("go").to_utf8())
+#		dlog("sending:"+ str(buffer.get_string_from_utf8()))
 		peer_udp.put_packet(buffer)
 
 	
@@ -121,9 +127,9 @@ func start_traversal():
 		dlog("Listening on port: " + str(rendevouz_port) + " to server: " + rendevouz_address)
 		
 	var recieved_peer_info = false
-	var recieved_peer_hello = false
-	var recieved_peer_letsgo = false
-	recieved_letsgo_confirm = false
+	var recieved_peer_greet = false
+	var recieved_peer_confirm = false
+	recieved_peer_go = false
 	
 	dlog("Connecting Rendezvouz Server...")
 	var buffer = PoolByteArray()

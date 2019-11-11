@@ -79,6 +79,12 @@ func _on_Join_pressed():
 	udp_traversal.is_host = false
 	start_traversal()
 
+func start_traversal():
+	udp_traversal.client_name = name_edit.text
+	udp_traversal.rendevouz_address = host_edit.text
+	udp_traversal.rendevouz_port = int(port_edit.text)
+	udp_traversal.start_traversal()
+	
 func host_game():
 	var host = NetworkedMultiplayerENet.new()
 	var port = udp_traversal.own_port
@@ -92,12 +98,6 @@ func host_game():
 	get_tree().set_network_peer(host)
 	dlog("Waiting for player..", true)
 
-func start_traversal():
-	udp_traversal.client_name = name_edit.text
-	udp_traversal.rendevouz_address = host_edit.text
-	udp_traversal.rendevouz_port = int(port_edit.text)
-	udp_traversal.start_traversal()
-	
 func join_game():
 	var ip = udp_traversal.peer_address
 	var port = udp_traversal.peer_port
