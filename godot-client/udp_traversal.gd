@@ -3,8 +3,8 @@ extends Node
 var server_udp = PacketPeerUDP.new()
 var peer_udp = PacketPeerUDP.new()
 
-var txt_server = "tyson5000.ddns.net" 
-var port = 4000
+var rendevouz_address = "tyson5000.ddns.net" 
+var rendevouz_port = 4000
 var found_server = false
 var recieved_peer = false
 
@@ -67,7 +67,6 @@ func ping_peer():
 #	dlog("pinging peer...")
 	var buffer = PoolByteArray()
 	buffer.append_array("Hello from your peer".to_utf8())
-#	buffer.resize("Hello from your peer".to_utf8().size())
 	peer_udp.put_packet(buffer)
 
 	
@@ -75,20 +74,19 @@ func start_server_contact():
 	
 	if server_udp.is_listening():
 		server_udp.close()
-	var err = server_udp.listen(port, "*")
+	var err = server_udp.listen(rendevouz_port, "*")
 	if err != OK:
-		dlog("Error listening on port: " + str(port) + " to server: " + txt_server)
+		dlog("Error listening on port: " + str(rendevouz_port) + " to server: " + rendevouz_address)
 	else:
-		dlog("Listening on port: " + str(port) + " to server: " + txt_server)
+		dlog("Listening on port: " + str(rendevouz_port) + " to server: " + rendevouz_address)
 		
 	found_server = false
 	recieved_peer = false
 	dlog("Connecting Rendezvouz Server...")
 	var buffer = PoolByteArray()
 	buffer.append_array("hello".to_utf8())
-#	buffer.resize("hello".to_utf8().size())
 	server_udp.close()
-	server_udp.set_dest_address(txt_server, port)
+	server_udp.set_dest_address(rendevouz_address, rendevouz_port)
 	server_udp.put_packet(buffer)
 		
 func _exit_tree():
