@@ -6,3 +6,4 @@
 *.pck
 .idea/
 godot-client/export/
+godot-client/multiplayer_pong/export/
