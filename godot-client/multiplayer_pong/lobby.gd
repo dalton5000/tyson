@@ -50,8 +50,6 @@ func _connected_fail():
 	
 	get_tree().set_network_peer(null) #remove peer
 	
-	get_node("panel/join").set_disabled(false)
-	get_node("panel/host").set_disabled(false)
 
 func _server_disconnected():
 	_end_game("Server disconnected")
@@ -66,8 +64,6 @@ func _end_game(with_error=""):
 	
 	get_tree().set_network_peer(null) #remove peer
 	
-	get_node("panel/join").set_disabled(false)
-	get_node("panel/host").set_disabled(false)
 	
 	dlog(with_error, false)
 
