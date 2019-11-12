@@ -3,6 +3,7 @@ extends Node
 signal hole_punched
 
 var server_udp = PacketPeerUDP.new()
+var contact_udp = PacketPeerUDP.new()
 var peer_udp = PacketPeerUDP.new()
 
 var rendevouz_address = "tyson5000.ddns.net" 
@@ -23,24 +24,47 @@ var peer_name
 var client_name
 var p_timer
 
+var ports_tried = 0
+
 func _process(delta):
-	if peer_udp.get_available_packet_count() > 0:
-		var array_bytes = peer_udp.get_packet()
+	if contact_udp.get_available_packet_count() > 0:
+		var array_bytes = contact_udp.get_packet()
 		var packet_string = array_bytes.get_string_from_ascii()
 		
 		if not recieved_peer_greet:
 			if packet_string.begins_with("greet"):
 				var p = packet_string.split(":")
 				peer_name = p[1]
-				dlog("Recieved greet from: "+peer_name)
+				var peer_used_port = p[2]
+				own_port = peer_used_port
+				dlog("Recieved greet from: "+peer_name + "on port: " + str(peer_used_port))
 				dlog("Sending confirm")
+				
 				recieved_peer_greet = true
 				
-		elif not recieved_peer_confirm:
+				
+	if peer_udp.get_available_packet_count() > 0:
+		var array_bytes = peer_udp.get_packet()
+		var packet_string = array_bytes.get_string_from_ascii()
+				
+		if not recieved_peer_confirm:
 			if packet_string.begins_with("confirm"):
-				dlog("Recieved confirm from: "+peer_name)
+				var p = packet_string.split(":")
+				var confirmed_port = p[1]
+				dlog("Recieved confirm from: "+peer_name + "for port: " + str(confirmed_port))
+				peer_port = confirmed_port
 				dlog("Sending go")
 				recieved_peer_confirm = true
+				contact_udp.close()
+				
+				if peer_udp.is_listening():
+					peer_udp.close()
+				peer_udp.set_dest_address(peer_address, peer_port)
+				var err = peer_udp.listen(own_port, "*")
+				if err != OK:
+					dlog("Error listening on port: " + str(own_port) + " to peer: " + peer_address)
+				else:
+					dlog("Listening on port: " + str(own_port) + " to peer : " + peer_address)
 				
 		elif not recieved_peer_go:
 			if packet_string.begins_with("go"):
@@ -71,17 +95,17 @@ func _process(delta):
 				peer_address = p[1]
 				peer_port =int( p[2] )
 				recieved_peer_info=true
-#				dlog("Peer adress: " + peer_address)
-#				dlog("Peer port: " + str( peer_port))
+				dlog("Peer adress: " + peer_address)
+				dlog("Peer port: " + str( peer_port))
 				start_peer_contact()
 				
 func start_peer_contact():	
 	server_udp.put_packet("goodbye".to_utf8())
 	server_udp.close()
-	if peer_udp.is_listening():
-		peer_udp.close()
-	peer_udp.set_dest_address(peer_address, peer_port)
-	var err = peer_udp.listen(own_port, "*")
+	if contact_udp.is_listening():
+		contact_udp.close()
+	contact_udp.set_dest_address(peer_address, peer_port)
+	var err = contact_udp.listen(own_port, "*")
 	if err != OK:
 		dlog("Error listening on port: " + str(own_port) + " to peer: " + peer_address)
 	else:
@@ -99,10 +123,16 @@ func ping_peer():
 	if starting_game: return
 	var buffer
 	if not recieved_peer_confirm:
-		buffer = PoolByteArray()
-		buffer.append_array(("greet:"+ client_name ).to_utf8())
+		for i in range(ports_tried, ports_tried+10):
+			var p = peer_port + i
+			contact_udp.set_dest_address(peer_address, p)
+			buffer = PoolByteArray()
+			buffer.append_array(("greet:"+ client_name+":"+str(p) ).to_utf8())
+			contact_udp.put_packet(buffer)
+			yield(get_tree(),"idle_frame")
+			dlog("pinging on port " + str(p))
+		ports_tried+=10
 #		dlog("sending:"+ str(buffer.get_string_from_utf8()))
-		peer_udp.put_packet(buffer)
 		
 	if recieved_peer_greet and not recieved_peer_go :
 		buffer = PoolByteArray()
@@ -126,10 +156,14 @@ func start_traversal():
 	else:
 		dlog("Listening on port: " + str(rendevouz_port) + " to server: " + rendevouz_address)
 		
-	var recieved_peer_info = false
-	var recieved_peer_greet = false
-	var recieved_peer_confirm = false
+	found_server = false
+	recieved_peer_info = false
+	
+	recieved_peer_greet = false
+	recieved_peer_confirm = false
 	recieved_peer_go = false
+
+	ports_tried = 0
 	
 	dlog("Connecting Rendezvouz Server...")
 	var buffer = PoolByteArray()
