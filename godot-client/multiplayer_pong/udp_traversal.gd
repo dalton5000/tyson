@@ -14,6 +14,7 @@ var recieved_peer_greet = false
 var recieved_peer_confirm = false
 var recieved_peer_go = false
 
+# warning-ignore:unused_class_variable
 var is_host = false
 var starting_game = false
 
@@ -26,6 +27,7 @@ var p_timer
 
 var ports_tried = 0
 
+# warning-ignore:unused_argument
 func _process(delta):
 	if contact_udp.get_available_packet_count() > 0:
 		var array_bytes = contact_udp.get_packet()
@@ -42,6 +44,15 @@ func _process(delta):
 				
 				recieved_peer_greet = true
 				
+				if peer_udp.is_listening():
+					peer_udp.close()
+				peer_udp.set_dest_address(peer_address, peer_port)
+				var err = peer_udp.listen(own_port, "*")
+				if err != OK:
+					dlog("Error listening on port: " + str(own_port) + " to peer: " + peer_address)
+				else:
+					dlog("Listening on port: " + str(own_port) + " to peer : " + peer_address)
+				
 				
 	if peer_udp.get_available_packet_count() > 0:
 		var array_bytes = peer_udp.get_packet()
@@ -56,15 +67,7 @@ func _process(delta):
 				dlog("Sending go")
 				recieved_peer_confirm = true
 				contact_udp.close()
-				
-				if peer_udp.is_listening():
-					peer_udp.close()
-				peer_udp.set_dest_address(peer_address, peer_port)
-				var err = peer_udp.listen(own_port, "*")
-				if err != OK:
-					dlog("Error listening on port: " + str(own_port) + " to peer: " + peer_address)
-				else:
-					dlog("Listening on port: " + str(own_port) + " to peer : " + peer_address)
+
 				
 		elif not recieved_peer_go:
 			if packet_string.begins_with("go"):
