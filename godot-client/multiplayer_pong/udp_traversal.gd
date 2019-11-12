@@ -123,6 +123,7 @@ func ping_peer():
 	if starting_game: return
 	var buffer
 	if not recieved_peer_confirm:
+		dlog("pinging on port " + str(ports_tried + peer_port) + " and above")
 		for i in range(ports_tried, ports_tried+10):
 			var p = peer_port + i
 			contact_udp.set_dest_address(peer_address, p)
@@ -130,13 +131,12 @@ func ping_peer():
 			buffer.append_array(("greet:"+ client_name+":"+str(p) ).to_utf8())
 			contact_udp.put_packet(buffer)
 			yield(get_tree(),"idle_frame")
-			dlog("pinging on port " + str(p))
 		ports_tried+=10
 #		dlog("sending:"+ str(buffer.get_string_from_utf8()))
 		
 	if recieved_peer_greet and not recieved_peer_go :
 		buffer = PoolByteArray()
-		buffer.append_array(("confirm").to_utf8())
+		buffer.append_array(("confirm:" + str(own_port)).to_utf8())
 #		dlog("sending:"+ str(buffer.get_string_from_utf8()))
 		peer_udp.put_packet(buffer)
 		
