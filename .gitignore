@@ -7,3 +7,4 @@
 .idea/
 godot-client/export/
 godot-client/multiplayer_pong/export/
+godot-client/multiplayer_pong/export_presets.cfg
