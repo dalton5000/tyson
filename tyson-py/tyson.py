@@ -13,7 +13,7 @@ def address_to_string(address):
 class ServerProtocol(DatagramProtocol):
 
     def __init__(self):
-        self.active_sessions = []
+        self.active_sessions = {}
         self.registered_clients = {}
 
     def name_is_registered(self, name):
