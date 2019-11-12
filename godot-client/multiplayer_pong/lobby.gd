@@ -45,9 +45,7 @@ func _connected_ok():
 	
 # callback from SceneTree, only for clients (not server)	
 func _connected_fail():
-
-	dlog("Couldn't connect",false)
-	
+	dlog("Couldn't connect",false)	
 	get_tree().set_network_peer(null) #remove peer
 	
 
@@ -103,7 +101,7 @@ func join_game():
 	
 	var host = NetworkedMultiplayerENet.new()
 	host.set_compression_mode(NetworkedMultiplayerENet.COMPRESS_RANGE_CODER)
-	host.create_client(ip, port)
+	host.create_client(ip, port, 0, 0, udp_traversal.own_port)
 	get_tree().set_network_peer(host)
 	
 	dlog("Connecting..", true)
