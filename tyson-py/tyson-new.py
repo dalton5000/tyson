@@ -24,7 +24,7 @@ class ServerProtocol(DatagramProtocol):
             print("Tried to create existing session")
             return
 
-        self.active_sessions[s_id] = Session(s_id, client_list)
+        self.active_sessions[s_id] = Session(s_id, client_list, self)
 
 
     def remove_session(self, s_id):
@@ -43,7 +43,7 @@ class ServerProtocol(DatagramProtocol):
         else:
             new_client = Client(c_name, c_session, c_ip, c_port)
             self.registered_clients[c_name] = new_client
-            self.active_sessions[c_session].register_client(new_client)
+            self.active_sessions[c_session].client_registered(new_client)
 
     def client_checkout(self, name):
         try:
@@ -89,14 +89,14 @@ class Session:
 
     def __init__(self, session_id, invited_clients, server):
         self.id = session_id
-        self.invited_clients = invited_clients
+        self.client_list = invited_clients
         self.server = server
 
     def client_registered(self, client):
         if client in self.registered_clients: return
         print("Client %c registered for Session %s" % client.name, self.id)
         self.registered_clients.append(client)
-        if self.registered_clients.size() == self.client_list.size():
+        if len(self.registered_clients) == len(self.client_list):
             print("Session full, sending out info to peers")
             self.exchange_peer_info()
 
